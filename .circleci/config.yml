@@ -17,12 +17,12 @@ jobs:
 
       - run:
           name: Loading Docker images
-            command: |
-              if [[ -e ~/caches/docker-images.tar ]]; then
-              docker load -i ~/caches/docker-images.tar
-              else
-              docker-compose build
-              fi
+          command: |
+            if [[ -e ~/caches/docker-images.tar ]]; then
+            docker load -i ~/caches/docker-images.tar
+            else
+            docker-compose build
+            fi
 
       - run:
           name: Running Docker containers
