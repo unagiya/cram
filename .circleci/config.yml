@@ -30,7 +30,7 @@ jobs:
 
       - run:
           name: Wait for database
-          command: docker-compose run --rm dockerize -wait tcp://mysql:3306 -timeout 1m
+          command: docker-compose run --rm dockerize -wait tcp://db:3306 -timeout 1m
 
       - run:
           name: Database setup
