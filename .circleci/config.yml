@@ -29,6 +29,10 @@ jobs:
           command: docker-compose up -d
 
       - run:
+          name: Wait for database
+          command: docker-compose run --rm dockerize -wait tcp://mysql:3306 -timeout 1m
+
+      - run:
           name: Database setup
           command: docker-compose run --rm -e RAILS_ENV=test web rake db:create db:schema:load --trace
 
