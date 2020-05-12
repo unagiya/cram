@@ -1,0 +1,58 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2 
+
+jobs:
+  build:
+    machine:
+      image: circleci/classic:edge
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ~/caches/docker-images.tar
+
+      - run:
+          name: Loading Docker images
+          command: |
+            if [[ -e ~/caches/docker-images.tar ]]; then
+            docker load -i ~/caches/docker-images.tar
+            else
+            docker-compose build
+            fi
+
+      - run:
+          name: Running Docker containers
+          command: docker-compose up -d
+
+      - run:
+          name: Wait for database
+          command: docker-compose run --rm dockerize -wait tcp://db:3306 -timeout 1m
+
+      - run:
+          name: Database setup
+          command: docker-compose run --rm -e RAILS_ENV=test web rake db:create db:schema:load --trace
+
+      - run:
+          name: Run tests!
+          command: docker-compose run --rm web rspec
+
+      - run:
+          name: Stopping Docker containers
+          command: docker-compose down
+
+      - run:
+          name: Saving Docker images
+          command: |
+            mkdir -p ~/caches
+            if [[ ! -e ~/caches/images.tar ]]; then
+              docker save -o ~/caches/docker-images.tar $(docker images --filter "dangling=false" --format "{{.Repository}}:{{.Tag}}")
+            fi
+
+      - save_cache:
+          key: v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ~/caches/docker-images.tar
