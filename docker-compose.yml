@@ -4,6 +4,7 @@ services:
     image: mysql:8.0
     volumes:
       - ./tmp/db:/var/lib/mysql
+      - ./build/mysql-confd:/etc/mysql/conf.d
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
   web:
