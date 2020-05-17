@@ -34,7 +34,7 @@ jobs:
 
       - run:
           name: Database setup
-          command: docker-compose run --rm -e RAILS_ENV=test web rake db:create db:schema:load --trace
+          command: echo "Skip Database setup" #docker-compose run --rm -e RAILS_ENV=test web rake db:create db:schema:load --trace
 
       - run:
           name: Run tests!
