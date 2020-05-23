@@ -26,7 +26,9 @@ jobs:
 
       - run:
           name: Running Docker containers
-          command: docker-compose up -d
+          command: |
+            cp -p .env.example .env
+            docker-compose up -d
 
       - run:
           name: Wait for database
