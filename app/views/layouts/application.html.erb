@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= docment_title %></title>
+    <title>App</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,12 +10,6 @@
   </head>
 
   <body>
-    <div id="wrapper">
-      <%= render "shared/header" %>
-      <div id="container">
-        <%= yield %>
-      </div>
-      <%= render "shared/footer" %>
-    </div>
+    <%= yield %>
   </body>
 </html>
